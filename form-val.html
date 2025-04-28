@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Validation System</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 130%;
+        }
+        .wrapper {
+            width: 550px;
+            margin: 0 auto;
+        }
+        label {
+            width: 200px;
+            float: left;
+            position: relative;
+            top: 12px;
+        }
+        input {
+            width: 320px;
+            font-size: 25px;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 5px 5px 12px 5px;
+        }
+        .formelement {
+            margin-bottom: 10px;
+        }
+        #submitButton {
+            width: 130px;
+            margin-left: 200px;
+        }
+        #errors {
+            color: red;
+            font-size: 90%;
+        }
+        #success {
+            color: green;
+            font-size: 90%;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="errors"></div>
+    <div id="success"></div>
+
+    <div class="wrapper">
+
+        <div class="formelement">
+            <label for="Email">Email</label>
+            <input type="text" id="Email" name="Email">
+        </div>
+
+        <div class="formelement">
+            <label for="phoneno">Phone-Number</label>
+            <input type="text" id="phoneno" name="phoneno">
+        </div>
+
+        <div class="formelement">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password">
+        </div>
+
+        <div class="formelement">
+            <label for="confirmpassword">Confirm Password</label>
+            <input type="password" id="confirmpassword" name="confirmpassword">
+        </div>
+
+        <input id="submitButton" type="submit" value="Submit">
+
+    </div>
+
+    <script>
+        function isEmail(email) {
+            var regex = /^([a-zA-Z0-9_.+-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
+            return regex.test(email);
+        }
+
+        $("#submitButton").click(function(event){
+            event.preventDefault(); // Stop page reload
+
+            // Clear previous messages
+            $("#errors").html("");
+            $("#success").html("");
+
+            var errormessage = "";
+            var missingfield = "";
+
+            // Checking for missing fields
+            if ($("#Email").val() == "") {
+                missingfield += "<p>Email is required</p>";
+            }
+            if ($("#phoneno").val() == "") {
+                missingfield += "<p>Phone Number is required</p>";
+            }
+            if ($("#password").val() == "") {
+                missingfield += "<p>Password is required</p>";
+            }
+            if ($("#confirmpassword").val() == "") {
+                missingfield += "<p>Confirm Password is required</p>";
+            }
+
+            // Field-specific validations
+            if ($("#Email").val() != "" && !isEmail($("#Email").val())) {
+                errormessage += "<p>Invalid Email</p>";
+            }
+            if ($("#phoneno").val() != "" && !$.isNumeric($("#phoneno").val())) {
+                errormessage += "<p>Phone number must be numeric</p>";
+            }
+            if ($("#password").val() != "" && $("#confirmpassword").val() != "" && $("#password").val() !== $("#confirmpassword").val()) {
+                errormessage += "<p>Passwords do not match</p>";
+            }
+
+            // Displaying the result
+            if (errormessage === "" && missingfield === "") {
+                $("#success").html("You are registered successfully!");
+            } else {
+                $("#errors").html(missingfield + errormessage);
+            }
+        });
+    </script>
+
+</body>
+</html>
